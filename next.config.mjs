@@ -19,10 +19,6 @@ const nextConfig = {
             key: "Cross-Origin-Embedder-Policy",
             value: "require-corp",
           },
-          {
-            key: "Cross-Origin-Resource-Policy",
-            value: "cross-origin",
-          },
         ],
       },
     ];
@@ -30,30 +26,14 @@ const nextConfig = {
 
   webpack(config, { buildId, dev, isServer, defaultLoaders, webpack }) {
     if (isServer === false) {
-      //console.log("config", config);
       config.resolve.alias = {
         ...config.resolve.alias,
         o1js: path.resolve(__dirname, "node_modules/o1js/dist/web/index.js"),
       };
-      //config.output.globalObject = "this";
-      config.experiments = { ...config.experiments, topLevelAwait: true };
-      config.optimization.minimizer = [];
     }
     return config;
   },
 
-  /*
-  webpack(config) {
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      o1js: path.resolve("node_modules/o1js/dist/web/index.js"),
-    };
-    config.experiments = { ...config.experiments, topLevelAwait: true };
-    config.optimization.minimizer = [];
-    config.output.globalObject = "this";
-    return config;
-  },
-   */
   images: {
     unoptimized: true,
   },
