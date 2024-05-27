@@ -24,7 +24,6 @@ import { Label } from "@/components/label";
 import { Input } from "@/components/input";
 import { mintRollupNFT } from "@/lib/rollup";
 import { sendClientTx } from "@/lib/client-tx";
-//import { clientCall } from "@/lib/client-call";
 
 export default function Mint() {
   const [name, setName] = useState("");
@@ -34,7 +33,6 @@ export default function Mint() {
   async function mintNFT() {
     setLoading(true);
     await sendClientTx(Number(name));
-    //await clientCall(Number(name));
     /*
     console.log("NFT name:", name, image);
     if (image === undefined) {
