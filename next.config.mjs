@@ -35,7 +35,7 @@ const nextConfig = {
     } else {
       config.resolve.alias = {
         ...config.resolve.alias,
-        o1js: path.resolve(__dirname, "node_modules/o1js/dist/node/index.js"),
+        o1js: "/node_modules/o1js/dist/node/index.js",
       };
       config.experiments = { ...config.experiments, topLevelAwait: true };
       config.optimization.minimizer = [];

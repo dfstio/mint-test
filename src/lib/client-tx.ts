@@ -41,6 +41,9 @@ export async function sendClientTx(value: number) {
   });
   console.timeEnd("transaction created");
   console.log("Tx created", tx);
+  console.time("proved");
+  await tx.prove();
+  console.timeEnd("proved");
 
   const transaction = tx.toJSON();
   const txResult = await (window as any).mina?.sendTransaction({
