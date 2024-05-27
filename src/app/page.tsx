@@ -23,6 +23,7 @@ import { Button } from "@/components/button";
 import { Label } from "@/components/label";
 import { Input } from "@/components/input";
 import { mintRollupNFT } from "@/lib/rollup";
+import { sendClientTx } from "@/lib/client-tx";
 
 export default function Mint() {
   const [name, setName] = useState("");
@@ -31,6 +32,8 @@ export default function Mint() {
 
   async function mintNFT() {
     setLoading(true);
+    await sendClientTx(Number(name));
+    /*
     console.log("NFT name:", name, image);
     if (image === undefined) {
       console.error("Image is undefined");
@@ -38,6 +41,7 @@ export default function Mint() {
       return;
     }
     await mintRollupNFT({ name, image });
+    */
     setLoading(false);
   }
 
