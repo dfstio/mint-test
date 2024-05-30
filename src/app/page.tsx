@@ -22,8 +22,8 @@ import { Fragment, useState } from "react";
 import { Button } from "@/components/button";
 import { Label } from "@/components/label";
 import { Input } from "@/components/input";
-import { mintRollupNFT } from "@/lib/rollup";
-import { sendClientTx } from "@/lib/client-tx";
+import { mintRollupNFT } from "@/lib/nft";
+//import { sendClientTx } from "@/lib/client-tx";
 
 export default function Mint() {
   const [name, setName] = useState("");
@@ -32,16 +32,23 @@ export default function Mint() {
 
   async function mintNFT() {
     setLoading(true);
-    await sendClientTx(Number(name));
-    /*
+    //await sendClientTx(Number(name));
+
     console.log("NFT name:", name, image);
     if (image === undefined) {
       console.error("Image is undefined");
       setLoading(false);
       return;
     }
-    await mintRollupNFT({ name, image });
-    */
+    await mintRollupNFT({
+      name,
+      image,
+      contractAddress: "contractAddress",
+      chain: "devnet",
+      developer: "DFST",
+      repo: "mint-test",
+    });
+
     setLoading(false);
   }
 

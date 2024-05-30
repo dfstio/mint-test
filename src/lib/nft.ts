@@ -1,6 +1,7 @@
 "use client";
 
-import { getFileData } from "./file";
+import { calculateSHA512 } from "./sha512";
+import { pinFile } from "./ipfs";
 
 export async function getAccount(): Promise<string | undefined> {
   const accounts = await (window as any)?.mina?.requestAccounts();
@@ -13,8 +14,15 @@ export async function getAccount(): Promise<string | undefined> {
   return address;
 }
 
-export async function mintRollupNFT(params: { name: string; image: File }) {
-  const { name, image } = params;
+export async function mintRollupNFT(params: {
+  name: string;
+  image: File;
+  contractAddress: string;
+  chain: string;
+  developer: string;
+  repo: string;
+}) {
+  const { name, image, contractAddress, chain, developer, repo } = params;
   const address = await getAccount();
   if (address === undefined) {
     console.error("Address is undefined");
@@ -25,7 +33,9 @@ export async function mintRollupNFT(params: { name: string; image: File }) {
     console.error("NFT name is undefined");
     return;
   }
-  const { RollupNFT } = await import("minanft");
+
+  const { Field } = await import("o1js");
+  const { RollupNFT, FileData } = await import("minanft");
 
   const nft = new RollupNFT({ name, address });
 
@@ -89,17 +99,33 @@ export async function mintRollupNFT(params: { name: string; image: File }) {
     });
 
     */
-  const imageData = await getFileData({
+
+  const ipfs = await pinFile({
     file: image,
-    pinataJWT,
+    keyvalues: {
+      name,
+      owner: address,
+      contractAddress,
+      chain,
+      developer,
+      repo,
+    },
   });
-  if (imageData === undefined) {
-    console.error("getFileData error: imageData is undefined");
-    return {
-      success: false,
-      error: "Cannot get image data",
-    };
-  }
+
+  console.log("image ipfs", ipfs);
+  const sha3_512 = await calculateSHA512(image);
+  console.log("image sha3_512", sha3_512);
+
+  const imageData = new FileData({
+    fileRoot: Field(0),
+    height: 0,
+    filename: image.name.substring(0, 30),
+    size: image.size,
+    mimeType: image.type.substring(0, 30),
+    sha3_512,
+    storage: `i:${ipfs}`,
+  });
+
   console.log("imageData", imageData);
   nft.updateFileData({ key: `image`, type: "image", data: imageData });
 
